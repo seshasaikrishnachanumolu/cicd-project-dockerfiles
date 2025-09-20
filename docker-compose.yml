@@ -47,17 +47,17 @@ services:
       MYSQL_CHARSET: utf8mb4
       MYSQL_COLLATION: utf8mb4_unicode_ci
     ports:
-      - "3308:3306"   # changed host port from 3307 to 3308 to avoid conflict
+      - "3308:3306"
     volumes:
       - mysql_data_custom:/var/lib/mysql
     networks:
       - khata-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p" ,"Seshasaich@123"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pSeshasaich@123"]
       timeout: 10s
       retries: 10
       interval: 5s
-      start_period: 30s
+      start_period: 45s
     restart: unless-stopped
 
 networks:
