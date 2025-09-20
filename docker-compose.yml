@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: khatabackend_custom
+    ports:
+      - "1015:1015"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql_custom:3306/project_db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Naveen@123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      mysql_custom:
+        condition: service_healthy
+    networks:
+      - khata-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: khatafrontend_custom
+    ports:
+      - "3001:80"
+    environment:
+      - VITE_API_URL=http://localhost:1015
+      - VITE_API_BASE_PATH=/api
+    depends_on:
+      - backend
+    networks:
+      - khata-network
+    restart: unless-stopped
+
+  mysql_custom:
+    image: mysql:8.0
+    container_name: mysql_custom
+    environment:
+      MYSQL_ROOT_PASSWORD: Naveen@123
+      MYSQL_DATABASE: project_db
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data_custom:/var/lib/mysql
+    networks:
+      - khata-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pNaveen@123"]
+      timeout: 10s
+      retries: 10
+      interval: 5s
+      start_period: 30s
+    restart: unless-stopped
+
+networks:
+  khata-network:
+    driver: bridge
+    name: khata-network
+
+volumes:
+  mysql_data_custom:
+    driver: local
