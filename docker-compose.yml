@@ -2,21 +2,6 @@ version: "3.8"
 
 services:
   backend:
-<<<<<<< HEAD
-    build:
-      context: .
-      dockerfile: Dockerfile.backend
-    container_name: cicd-project-backend-1
-    ports:
-      - "8080:8080"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql_custom:3306/lldb_db
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=Seshasaich@123
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_JPA_SHOW_SQL=true
-      - SPRING_PROFILES_ACTIVE=docker
-=======
     build: ./backend
     image: sdp-backend:latest
     ports:
@@ -29,44 +14,21 @@ services:
       SPRING_MAIL_PASSWORD: yourpassword
       RAZORPAY_KEY_ID: rzp_test_jVej2lE9ffasi1
       RAZORPAY_SECRET_KEY: 7MrYfpK5LmPzhg1jsM31kVlJ
->>>>>>> 47f9924 (first commit)
     depends_on:
       - db
     networks:
       - cicd-network
 
   frontend:
-<<<<<<< HEAD
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    container_name: cicd-project-frontend-1
-    ports:
-      - "5173:80"
-    environment:
-      - VITE_API_URL=http://localhost:8080
-      - VITE_API_BASE_PATH=/api
-=======
     build: ./frontend
     image: ecommerce-frontend:latest
     ports:
       - "5173:80"
->>>>>>> 47f9924 (first commit)
     depends_on:
       - backend
     networks:
       - cicd-network
 
-<<<<<<< HEAD
-  mysql_custom:
-    image: mysql:8.0
-    container_name: cicd-project-db-1
-    environment:
-      MYSQL_ROOT_PASSWORD: Seshasaich@123
-      MYSQL_DATABASE: lldb_db
-      MYSQL_CHARSET: utf8mb4
-      MYSQL_COLLATION: utf8mb4_unicode_ci
-=======
   db:
     image: mysql:8
     container_name: ecommerce-db
@@ -74,7 +36,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: Seshasaich@123
       MYSQL_DATABASE: lldb
->>>>>>> 47f9924 (first commit)
     ports:
       - "3308:3306"
     volumes:
@@ -87,15 +48,6 @@ services:
       retries: 10
       interval: 5s
       start_period: 45s
-<<<<<<< HEAD
-    restart: unless-stopped
-
-networks:
-  khata-network:
-    driver: bridge
-    name: khata-network
-=======
->>>>>>> 47f9924 (first commit)
 
 volumes:
   db_data:

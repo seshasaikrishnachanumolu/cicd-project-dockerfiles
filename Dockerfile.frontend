@@ -1,83 +1,14 @@
 # Build stage: clone the code
 FROM node:18 AS build-stage
 WORKDIR /app
-
 RUN apt-get update && apt-get install -y git
-
 RUN git clone https://github.com/seshasaikrishnachanumolu/cicd-project-frontend.git .
-<<<<<<< HEAD
-
-RUN ls -la
-
-ARG VITE_API_URL
-ENV VITE_API_URL=$VITE_API_URL
-
-=======
->>>>>>> 47f9924 (first commit)
 RUN npm install
-
 RUN npm run build
-<<<<<<< HEAD
-
-RUN ls -la dist/
-
-FROM nginx:1.25-alpine
-
-=======
 
 # Runtime stage
 FROM nginx:alpine
->>>>>>> 47f9924 (first commit)
 RUN rm -rf /usr/share/nginx/html/*
-
 COPY --from=build-stage /app/dist /usr/share/nginx/html
-<<<<<<< HEAD
-
-COPY <<EOF /etc/nginx/conf.d/default.conf
-server {
-    listen 80;
-    server_name localhost;
-    root /usr/share/nginx/html;
-    index index.html;
-
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-XSS-Protection "1; mode=block" always;
-    add_header X-Content-Type-Options "nosniff" always;
-
-    gzip on;
-    gzip_vary on;
-    gzip_min_length 1024;
-    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
-
-    location / {
-        try_files \$uri \$uri/ /index.html;
-        expires -1;
-        add_header Cache-Control "no-cache, no-store, must-revalidate";
-    }
-
-    location /assets {
-        expires 1y;
-        add_header Cache-Control "public, no-transform";
-    }
-
-    location /api {
-        proxy_pass http://cicd-project-backend-1:8080;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-    }
-
-    location /health {
-        access_log off;
-        return 200 "healthy\n";
-        add_header Content-Type text/plain;
-    }
-}
-EOF
-
-=======
->>>>>>> 47f9924 (first commit)
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]
