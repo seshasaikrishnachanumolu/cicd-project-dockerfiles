@@ -37,6 +37,7 @@ services:
 
   db:
     image: mysql:8
+    container_name: cicd-project-2-db-1
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: Seshasaich@123
