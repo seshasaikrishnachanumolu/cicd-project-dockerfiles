@@ -2,7 +2,9 @@ version: "3.8"
 
 services:
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     image: sdp-backend:latest
     ports:
       - "8086:8086"
@@ -20,7 +22,9 @@ services:
       - cicd-network
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     image: ecommerce-frontend:latest
     ports:
       - "5173:80"
