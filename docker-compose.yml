@@ -3,8 +3,8 @@ version: "3.8"
 services:
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.backend
     image: sdp-backend:latest
     ports:
       - "8086:8086"
@@ -23,8 +23,8 @@ services:
 
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.frontend
     image: ecommerce-frontend:latest
     ports:
       - "5173:80"
@@ -35,7 +35,6 @@ services:
 
   db:
     image: mysql:8
-    container_name: ecommerce-db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: Seshasaich@123
