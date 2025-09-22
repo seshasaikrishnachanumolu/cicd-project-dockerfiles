@@ -1,67 +1,58 @@
-version: '3.8'
-
+version: "3.8"
 services:
-  # MySQL Database
-  db:
-    image: mysql:8
-    container_name: cicd-db
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: "Seshasaich@123"
-      MYSQL_DATABASE: lldb
-    ports:
-      - "3310:3306"
-    volumes:
-      - db_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pSeshasaich@123"]
-      timeout: 10s
-      retries: 10
-      interval: 5s
-      start_period: 45s
-    networks:
-      - cicd-network
-
-  # Backend Service
   backend:
     build:
       context: .
-      dockerfile: Dockerfile-backend   # points directly to the backend Dockerfile in root
+      dockerfile: Dockerfile.backend
     image: sdp-backend:latest
-    container_name: sdp-backend-container
     ports:
       - "8086:8086"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/lldb
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: "Seshasaich@123"
+      SPRING_DATASOURCE_PASSWORD: Seshasaich@123
       SPRING_MAIL_USERNAME: llcart2024@gmail.com
       SPRING_MAIL_PASSWORD: yourpassword
       RAZORPAY_KEY_ID: rzp_test_jVej2lE9ffasi1
       RAZORPAY_SECRET_KEY: 7MrYfpK5LmPzhg1jsM31kVlJ
+      SERVER_ADDRESS: 0.0.0.0
     depends_on:
       db:
         condition: service_healthy
     networks:
       - cicd-network
-
-  # Frontend Service
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile-frontend   # points directly to the frontend Dockerfile in root
+      dockerfile: Dockerfile.frontend
     image: ecommerce-frontend:latest
-    container_name: ecommerce-frontend-container
     ports:
       - "5173:80"
     depends_on:
       - backend
     networks:
       - cicd-network
-
+  db:
+    image: mysql:8
+    container_name: cicd-project-2-db-1
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Seshasaich@123
+      MYSQL_DATABASE: lldb
+    ports:
+      - "3308:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - cicd-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pSeshasaich@123"]
+      timeout: 10s
+      retries: 10
+      interval: 5s
+      start_period: 45s
 volumes:
   db_data:
-
 networks:
   cicd-network:
     driver: bridge
