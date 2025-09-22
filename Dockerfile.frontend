@@ -1,36 +1,10 @@
-# Use Node.js for frontend
-FROM node:18
-
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
-
-# Clone your frontend repo
-RUN git clone https://github.com/seshasaikrishnachanumolu/cicd-project-frontend.git /app
-
+FROM node:18 AS build
 WORKDIR /app
-<<<<<<< HEAD
-# Clone your frontend repository directly into the image
+# Clone your frontend repo
 RUN git clone https://github.com/seshasaikrishnachanumolu/cicd-project-frontend.git .
-=======
-
-# Install dependencies
->>>>>>> a1d975e (first commit)
 RUN npm install
-
-# Build frontend (Vite or React build)
 RUN npm run build
-
-<<<<<<< HEAD
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
-=======
-# Serve with a simple HTTP server (nginx is also an option)
-RUN npm install -g serve
-
-# Expose port (your compose maps 5173 → 80)
-EXPOSE 80
-
-# Run the frontend
-CMD ["serve", "-s", "dist", "-l", "80"]
->>>>>>> a1d975e (first commit)
