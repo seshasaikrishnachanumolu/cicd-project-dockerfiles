@@ -1,10 +1,13 @@
+version: '3.8'
+
 services:
+  # MySQL Database
   db:
     image: mysql:8
     container_name: cicd-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: Seshasaich@123
+      MYSQL_ROOT_PASSWORD: "Seshasaich@123"
       MYSQL_DATABASE: lldb
     ports:
       - "3310:3306"
@@ -16,11 +19,14 @@ services:
       retries: 10
       interval: 5s
       start_period: 45s
+    networks:
+      - cicd-network
 
+  # Backend Service
   backend:
     build:
-      context: .                # use repo root
-      dockerfile: backend/Dockerfile
+      context: .
+      dockerfile: Dockerfile-backend   # points directly to the backend Dockerfile in root
     image: sdp-backend:latest
     container_name: sdp-backend-container
     ports:
@@ -28,7 +34,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/lldb
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: Seshasaich@123
+      SPRING_DATASOURCE_PASSWORD: "Seshasaich@123"
       SPRING_MAIL_USERNAME: llcart2024@gmail.com
       SPRING_MAIL_PASSWORD: yourpassword
       RAZORPAY_KEY_ID: rzp_test_jVej2lE9ffasi1
@@ -39,10 +45,11 @@ services:
     networks:
       - cicd-network
 
+  # Frontend Service
   frontend:
     build:
       context: .
-      dockerfile: frontend/Dockerfile
+      dockerfile: Dockerfile-frontend   # points directly to the frontend Dockerfile in root
     image: ecommerce-frontend:latest
     container_name: ecommerce-frontend-container
     ports:
