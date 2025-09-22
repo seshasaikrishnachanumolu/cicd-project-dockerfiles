@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   db:
     image: mysql:8
@@ -21,7 +19,8 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: .                # use repo root
+      dockerfile: backend/Dockerfile
     image: sdp-backend:latest
     container_name: sdp-backend-container
     ports:
@@ -42,7 +41,8 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: .
+      dockerfile: frontend/Dockerfile
     image: ecommerce-frontend:latest
     container_name: ecommerce-frontend-container
     ports:
